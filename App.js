@@ -6,6 +6,7 @@ import { useState } from 'react';
 export default function App() {
   const apiKey = "AIzaSyC2RCOa6PiG990HjVY_BHr9ftPErtERWRw";
   const url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=";
+  const signUpUrl = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=";
   const [enteredEmail, setEnteredEmail] = useState("test@m.dk");
   const [enteredPassword, setEnteredPassword] = useState("123456");
 
@@ -21,6 +22,20 @@ export default function App() {
 
     }catch(error){
       alert("Not logged in " + error.response.data.error.errors[0].message)
+    }
+  }
+
+  async function signUp(){
+    try{
+      const response = await axios.post(signUpUrl + apiKey, {
+        email:enteredEmail,
+        password:enteredPassword,
+        returnSecureToken:true
+      })
+      alert("Signed up " + response.data.idToken)
+
+    }catch(error){
+      alert("Failed to signup " + error.response.data.error.errors[0].message)
     }
   }
 
@@ -40,6 +55,20 @@ export default function App() {
       <Button
       title='Log in'
       onPress={login}
+      />
+
+      <TextInput 
+        onChangeText={newText => setEnteredEmail(newText)}
+        value={enteredEmail}
+      />
+
+      <TextInput 
+        onChangeText={newText => setEnteredPassword(newText)}
+        value={enteredPassword}
+      />
+      <Button
+      title='Sign up'
+      onPress={signUp}
       />
       
      
